@@ -27,6 +27,7 @@ The system is divided into three distinct functional areas to serve different st
   - **Inventory Management**: Monitor Plywood and Plypatta stock.
   - **Human Resources**: Manage employee attendance and payroll.
   - **Real-time Logistics**: Trolley tracking and dispatch management.
+  - **Customer Message Management**: View and manage inquiries from the public website.
   - **Data Controls**: Export business data as JSON for backups.
 - **Access**: Authorized personnel only.
 
