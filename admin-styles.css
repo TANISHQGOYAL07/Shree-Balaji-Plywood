@@ -1,4 +1,4 @@
-/* Shree Balaji Wood - Premium Admin Dashboard Styles */
+/* Shri Balaji Wood - Premium Admin Dashboard Styles */
 
 :root {
     --primary: #8b5a2b;
@@ -493,7 +493,7 @@ tr:hover {
 /* Responsive Overrides */
 @media (max-width: 1024px) {
     .sidebar { width: 80px; transition: width 0.3s ease; }
-    .sidebar-header h3, .sidebar-nav span { display: none; }
+    .sidebar-header h3, .sidebar-nav a span { display: none; }
     .sidebar-nav li { padding: 1.2rem; justify-content: center; }
     .sidebar-nav li a i { font-size: 1.4rem; margin: 0; }
     .main-content { margin-left: 80px; }
@@ -503,46 +503,63 @@ tr:hover {
     .dashboard-wrap { flex-direction: column; }
     .sidebar { 
         width: 100%; 
-        height: auto; 
+        height: 70px; 
         position: fixed; 
         bottom: 0; 
         top: auto; 
         flex-direction: row;
         border-right: none;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
+        overflow: visible;
     }
     .sidebar-header { display: none; }
-    .sidebar-nav { padding: 0; width: 100%; }
+    .sidebar-nav { padding: 0; width: 100%; height: 100%; }
     .sidebar-nav ul { 
         display: flex; 
+        height: 100%;
         overflow-x: auto; 
         scrollbar-width: none; 
         -ms-overflow-style: none;
+        align-items: center;
     }
     .sidebar-nav ul::-webkit-scrollbar { display: none; }
     .sidebar-nav li { 
-        padding: 1rem 1.5rem; 
+        padding: 0.5rem 1rem; 
         border-left: none; 
         border-top: 3px solid transparent;
         flex: 1;
-        min-width: 80px;
+        min-width: 70px;
+        height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+    }
+    .sidebar-nav li a {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.7rem;
+    }
+    .sidebar-nav li a i {
+        font-size: 1.2rem;
     }
     .sidebar-nav li.active { border-left: none; border-top: 3px solid var(--primary); }
     .sidebar-footer { display: none; }
     
-    .main-content { margin-left: 0; margin-bottom: 70px; padding: 1.5rem; }
+    .main-content { margin-left: 0; margin-bottom: 70px; padding: 1rem; }
     
     .top-nav { flex-direction: column-reverse; gap: 1rem; align-items: flex-start; }
     .search-bar { width: 100%; }
-    .user-profile { width: 100%; justify-content: space-between; }
+    .user-profile { width: 100%; justify-content: space-between; font-size: 0.8rem; }
     
-    .section-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
-    .section-top h1 { font-size: 1.5rem; }
+    .section-top { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+    .section-top h1 { font-size: 1.4rem; }
+    .section-top .btn { width: 100%; justify-content: center; }
     
-    .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .stat-card { padding: 1rem; flex-direction: column; text-align: center; gap: 0.5rem; }
-    .stat-card i { width: 45px; height: 45px; font-size: 1.2rem; }
-    .stat-info h3 { font-size: 1.2rem; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .stat-card { padding: 0.8rem; flex-direction: column; text-align: center; gap: 0.3rem; }
+    .stat-card i { width: 40px; height: 40px; font-size: 1.1rem; }
+    .stat-info p { font-size: 0.75rem; }
+    .stat-info h3 { font-size: 1.1rem; }
     
     .form-row { grid-template-columns: 1fr; gap: 1rem; }
     
@@ -552,6 +569,10 @@ tr:hover {
 
 @media (max-width: 480px) {
     .stats-grid { grid-template-columns: 1fr; }
-    .sidebar-nav li { padding: 0.8rem 1rem; }
-    .sidebar-nav li a i { font-size: 1.2rem; }
+    .sidebar-nav li { padding: 0.5rem; min-width: 65px; }
+    .sidebar-nav li a { font-size: 0.6rem; }
+    .sidebar-nav li a i { font-size: 1.1rem; }
+    
+    .top-nav { margin-bottom: 1.5rem; }
+    .section-top h1 { font-size: 1.2rem; }
 }

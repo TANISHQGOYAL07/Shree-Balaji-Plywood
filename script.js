@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 if (response.ok) {
-                    alert('Thank you for contacting Shree Balaji Wood. Your message has been sent and saved!');
+                    alert('Thank you for contacting Shri Balaji Wood. Your message has been sent and saved!');
                 } else {
                     alert('Message saved to our dashboard, but email delivery failed. We will still see your message!');
                 }
