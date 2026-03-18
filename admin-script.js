@@ -142,7 +142,7 @@ function initMap() {
     });
 
     L.marker(factoryCoords, {icon: factoryIcon}).addTo(map)
-        .bindPopup('<b>Shree Balaji Plywood Factory</b><br>Active Production Center<br><br><a href="https://www.google.com/maps/dir/?api=1&destination=30.1185467,77.2461462" target="_blank" style="color: #8b5a2b; font-weight: 600; text-decoration: none;"><i class="fa-solid fa-diamond-turn-right"></i> Get Directions</a>')
+        .bindPopup('<b>Shree Balaji Wood Factory</b><br>Active Production Center<br><br><a href="https://www.google.com/maps/dir/?api=1&destination=30.1185467,77.2461462" target="_blank" style="color: #8b5a2b; font-weight: 600; text-decoration: none;"><i class="fa-solid fa-diamond-turn-right"></i> Get Directions</a>')
         .openPopup();
 }
 

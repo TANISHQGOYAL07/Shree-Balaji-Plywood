@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Mock API call delay
             setTimeout(() => {
-                alert('Thank you for contacting Shree Balaji Plywood. We will get back to you shortly!');
+                alert('Thank you for contacting Shree Balaji Wood. We will get back to you shortly!');
                 this.reset();
                 btn.innerHTML = originalText;
                 btn.style.opacity = '1';

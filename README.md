@@ -1,6 +1,6 @@
-# 🪵 Shree Balaji Plywood Management System
+# 🪵 Shree Balaji Wood Management System
 
-A comprehensive, responsive, and secure management platform designed for **Shree Balaji Plywood**, a premium manufacturer of high-quality **Plypatta (Core Veneer)** based in Yamunanagar, Haryana.
+A comprehensive, responsive, and secure management platform designed for **Shree Balaji Wood**, a premium manufacturer of high-quality **Plypatta (Core Veneer)** based in Yamunanagar, Haryana.
 
 ---
 
@@ -55,7 +55,7 @@ The system is divided into three distinct functional areas to serve different st
 
 ### Local Setup
 1. Clone or download this repository to your local machine.
-2. Navigate to the `shree_balaji_plywood` directory.
+2. Navigate to the `shree_balaji_wood` directory.
 3. Simply double-click `index.html` to launch the site in any modern browser.
 
 ### Mobile Access for Workers
@@ -79,7 +79,7 @@ The system is divided into three distinct functional areas to serve different st
 ## 📂 Project Structure
 
 ```text
-shree_balaji_plywood/
+shree_balaji_wood/
 ├── index.html          # Main customer website
 ├── admin.html          # PIN-protected business dashboard
 ├── checkin.html        # Simple worker attendance portal
@@ -95,12 +95,12 @@ shree_balaji_plywood/
 
 ## 📧 Contact & Support
 
-**Shree Balaji Plywood**
+**Shree Balaji Wood**
 - 📍 **Location**: Industrial Area, Yamunanagar, Haryana
 - 📞 **Phone**: +91 98765 43210
-- ✉️ **Email**: info@shreebalajiplywood.com
+- ✉️ **Email**: info@shreebalajiwood.com
 - 🗺️ [Get Directions on Google Maps](https://www.google.com/maps/dir/?api=1&destination=30.1185467,77.2461462)
 
 ---
 
-*&copy; 2026 Shree Balaji Plywood. Manufactured with precision, designed for durability.*
+*&copy; 2026 Shree Balaji Wood. Manufactured with precision, designed for durability.*
