@@ -54,7 +54,8 @@ let state = {
     expenses: JSON.parse(localStorage.getItem('sbp_expenses')) || [],
     fleet: JSON.parse(localStorage.getItem('sbp_fleet')) || [],
     employees: JSON.parse(localStorage.getItem('sbp_employees')) || [],
-    attendance: JSON.parse(localStorage.getItem('sbp_attendance')) || {}
+    attendance: JSON.parse(localStorage.getItem('sbp_attendance')) || {},
+    messages: JSON.parse(localStorage.getItem('sbw_messages')) || []
 };
 
 let map; // Global map instance
@@ -91,6 +92,7 @@ function refreshAllTables() {
     loadEmployeeTable();
     loadAttendance();
     loadPayroll();
+    loadMessagesTable();
 }
 
 function updateDate() {
@@ -457,6 +459,41 @@ function markDelivered(id) {
     }
 }
 
+/**
+ * Message Management
+ */
+function loadMessagesTable() {
+    const tbody = document.querySelector('#messagesTable tbody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+
+    state.messages.forEach(msg => {
+        const row = `
+            <tr>
+                <td>${msg.date}</td>
+                <td>${msg.name}</td>
+                <td>${msg.email}<br><small>${msg.phone}</small></td>
+                <td><div class="msg-content" title="${msg.message}">${msg.message}</div></td>
+                <td><span class="status-pill ${msg.status === 'Read' ? 'status-present' : 'status-toggle'}">${msg.status}</span></td>
+                <td>
+                    ${msg.status === 'New' ? `<button class="btn outline-btn" style="padding: 0.2rem 0.5rem; font-size: 0.7rem; margin-right: 0.3rem;" onclick="markMessageRead(${msg.id})"><i class="fa-solid fa-check"></i></button>` : ''}
+                    <button class="delete-btn" onclick="deleteRecord('messages', ${msg.id})"><i class="fa-solid fa-trash"></i></button>
+                </td>
+            </tr>
+        `;
+        tbody.innerHTML += row;
+    });
+}
+
+function markMessageRead(id) {
+    const msg = state.messages.find(m => m.id === id);
+    if(msg) {
+        msg.status = 'Read';
+        saveState();
+        loadMessagesTable();
+    }
+}
+
 
 /**
  * Overview Calculations
@@ -499,6 +536,7 @@ function saveState() {
     localStorage.setItem('sbp_fleet', JSON.stringify(state.fleet));
     localStorage.setItem('sbp_employees', JSON.stringify(state.employees));
     localStorage.setItem('sbp_attendance', JSON.stringify(state.attendance));
+    localStorage.setItem('sbw_messages', JSON.stringify(state.messages));
 }
 
 function deleteRecord(type, id) {
@@ -509,6 +547,7 @@ function deleteRecord(type, id) {
     if(type === 'expenses') state.expenses = state.expenses.filter(item => item.id !== id);
     if(type === 'fleet') state.fleet = state.fleet.filter(item => item.id !== id);
     if(type === 'employees') state.employees = state.employees.filter(emp => emp.id !== id);
+    if(type === 'messages') state.messages = state.messages.filter(msg => msg.id !== id);
     
     saveState();
     refreshAllTables();

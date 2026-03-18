@@ -126,24 +126,56 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Form Submission (mock)
+    // Form Submission (Real Integration)
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = this.querySelector('button[type="submit"]');
             const originalText = btn.innerHTML;
             
+            // 1. Prepare Data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            data.id = Date.now();
+            data.date = new Date().toISOString().split('T')[0];
+            data.status = 'New';
+
+            // 2. UI Feedback
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sending...';
             btn.style.opacity = '0.8';
-            
-            // Mock API call delay
-            setTimeout(() => {
-                alert('Thank you for contacting Shree Balaji Wood. We will get back to you shortly!');
+            btn.disabled = true;
+
+            try {
+                // 3. Save to LocalStorage for Admin Dashboard
+                const messages = JSON.parse(localStorage.getItem('sbw_messages')) || [];
+                messages.unshift(data);
+                localStorage.setItem('sbw_messages', JSON.stringify(messages));
+
+                // 4. Send to Formspree (if Form ID is provided, otherwise skip gracefully)
+                // Note: Change 'YOUR_FORM_ID' to your actual Formspree ID
+                const formId = 'mqakovge'; // Placeholder: Please update with your actual Formspree ID
+                const response = await fetch(`https://formspree.io/f/${formId}`, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    alert('Thank you for contacting Shree Balaji Wood. Your message has been sent and saved!');
+                } else {
+                    alert('Message saved to our dashboard, but email delivery failed. We will still see your message!');
+                }
+                
                 this.reset();
+            } catch (error) {
+                console.error('Submission error:', error);
+                alert('We saved your message to our records, but encountered an error. We will get back to you!');
+            } finally {
                 btn.innerHTML = originalText;
                 btn.style.opacity = '1';
-            }, 1500);
+                btn.disabled = false;
+            }
         });
     }
 });

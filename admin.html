@@ -56,6 +56,7 @@
                     <li data-section="employees"><a href="#"><i class="fa-solid fa-users"></i> Employees</a></li>
                     <li data-section="attendance"><a href="#"><i class="fa-solid fa-calendar-check"></i> Attendance</a></li>
                     <li data-section="payroll"><a href="#"><i class="fa-solid fa-money-bill-transfer"></i> Payroll</a></li>
+                    <li data-section="messages"><a href="#"><i class="fa-solid fa-envelope-open-text"></i> Messages</a></li>
                 </ul>
             </nav>
             <div class="sidebar-footer">
@@ -329,6 +330,29 @@
                                     <th>Trolley</th>
                                     <th>Driver</th>
                                     <th>Destination</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Messages Section -->
+                <section id="messages" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Customer Messages</h1>
+                        <button class="btn outline-btn" onclick="exportData('messages')"><i class="fa-solid fa-download"></i> Export</button>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="messagesTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Contact</th>
+                                    <th>Message</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
