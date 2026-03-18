@@ -1,0 +1,19 @@
+{
+  "name": "shree-balaji-plywood-management",
+  "version": "1.0.0",
+  "description": "Internal management system and public website for Shree Balaji Plywood.",
+  "main": "index.html",
+  "keywords": [
+    "plywood",
+    "management",
+    "dashboard",
+    "attendance",
+    "ledger"
+  ],
+  "author": "Shree Balaji Plywood",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shree-balaji-plywood/management-system"
+  }
+}
