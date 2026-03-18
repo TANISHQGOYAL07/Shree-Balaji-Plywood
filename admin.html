@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBW Admin | Management Dashboard</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Leaflet Map CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+</head>
+<body>
+    <!-- PIN Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-box glass-panel">
+            <div class="login-header">
+                <i class="fa-solid fa-lock"></i>
+                <h2>Admin Login</h2>
+                <p>Enter Master PIN to continue</p>
+            </div>
+            <div class="pin-display">
+                <input type="password" id="pinInput" maxlength="4" placeholder="••••" readonly>
+            </div>
+            <div class="pin-keypad">
+                <button onclick="appendPin(1)">1</button>
+                <button onclick="appendPin(2)">2</button>
+                <button onclick="appendPin(3)">3</button>
+                <button onclick="appendPin(4)">4</button>
+                <button onclick="appendPin(5)">5</button>
+                <button onclick="appendPin(6)">6</button>
+                <button onclick="appendPin(7)">7</button>
+                <button onclick="appendPin(8)">8</button>
+                <button onclick="appendPin(9)">9</button>
+                <button onclick="clearPin()">C</button>
+                <button onclick="appendPin(0)">0</button>
+                <button id="loginBtn" onclick="verifyPin()"><i class="fa-solid fa-check"></i></button>
+            </div>
+            <p id="loginError" class="error-msg"></p>
+        </div>
+    </div>
+
+    <div class="dashboard-wrap" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>SBW Dashboard</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-section="overview"><a href="#"><i class="fa-solid fa-chart-line"></i> <span>Overview</span></a></li>
+                    <li data-section="ledger"><a href="#"><i class="fa-solid fa-book"></i> <span>Business Ledger</span></a></li>
+                    <li data-section="inventory"><a href="#"><i class="fa-solid fa-warehouse"></i> <span>Inventory</span></a></li>
+                    <li data-section="expenses"><a href="#"><i class="fa-solid fa-file-invoice-dollar"></i> <span>Expenses</span></a></li>
+                    <li data-section="tracking"><a href="#"><i class="fa-solid fa-truck-ramp-box"></i> <span>Trolley Tracking</span></a></li>
+                    <li data-section="employees"><a href="#"><i class="fa-solid fa-users"></i> <span>Employees</span></a></li>
+                    <li data-section="attendance"><a href="#"><i class="fa-solid fa-calendar-check"></i> <span>Attendance</span></a></li>
+                    <li data-section="payroll"><a href="#"><i class="fa-solid fa-money-bill-transfer"></i> <span>Payroll</span></a></li>
+                    <li data-section="messages"><a href="#"><i class="fa-solid fa-envelope-open-text"></i> <span>Messages</span></a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="#" onclick="lockDashboard()"><i class="fa-solid fa-power-off"></i> Lock Dashboard</a>
+                <br><br>
+                <a href="index.html"><i class="fa-solid fa-arrow-left"></i> Public Site</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="search-bar">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" placeholder="Quick search records...">
+                </div>
+                <div class="user-profile">
+                    <span id="currentDate"></span>
+                    <div class="avatar">Admin</div>
+                </div>
+            </header>
+
+            <div id="content-area" class="content-area">
+                <!-- Overview Section (Default) -->
+                <section id="overview" class="dashboard-section active">
+                    <div class="section-top">
+                        <h1>Business Overview</h1>
+                        <button class="btn primary-btn add-btn" onclick="openModal('ledger')"><i class="fa-solid fa-plus"></i> New Sale</button>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fa-solid fa-sack-dollar"></i>
+                            <div class="stat-info">
+                                <p>Total Revenue</p>
+                                <h3 id="totalRevenue">₹0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-layer-group"></i>
+                            <div class="stat-info">
+                                <p>Plypatta Sold</p>
+                                <h3 id="totalSales">0 Units</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-money-bill-trend-up"></i>
+                            <div class="stat-info">
+                                <p>Total Expenses</p>
+                                <h3 id="totalExpenses" style="color: #dc3545">₹0</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-piggy-bank"></i>
+                            <div class="stat-info">
+                                <p>Gross Profit</p>
+                                <h3 id="grossProfit" style="color: #28a745">₹0</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="map-preview glass-panel" style="margin-bottom: 3rem; margin-top: 2rem;">
+                        <div class="panel-header">
+                            <h2>Factory Location & Fleet Status</h2>
+                        </div>
+                        <div id="factoryMap" style="height: 300px; border-radius: 12px; z-index: 1;"></div>
+                    </div>
+
+                    <div class="recent-records glass-panel">
+                        <div class="panel-header">
+                            <h2>Recent Ledger Entries</h2>
+                            <a href="#" onclick="switchSection('ledger')">View All</a>
+                        </div>
+                        <table id="recentLedgerTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Quantity</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Entries loaded via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Ledger Section -->
+                <section id="ledger" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Business Ledger</h1>
+                        <div class="actions">
+                            <button class="btn primary-btn" onclick="openModal('ledger')"><i class="fa-solid fa-plus"></i> Add Entry</button>
+                            <button class="btn outline-btn" onclick="exportData('ledger')"><i class="fa-solid fa-download"></i> Export</button>
+                        </div>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="fullLedgerTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Description</th>
+                                    <th>Quantity</th>
+                                    <th>Amount (₹)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Employees Section -->
+                <section id="employees" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Employee Data</h1>
+                        <button class="btn primary-btn" onclick="openModal('employee')"><i class="fa-solid fa-user-plus"></i> Add Employee</button>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="employeeTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee ID</th>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Daily Wage (₹)</th>
+                                    <th>Join Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Attendance Section -->
+                <section id="attendance" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Daily Attendance</h1>
+                        <div class="attendance-date-selector">
+                           <input type="date" id="attendanceDatePicker">
+                        </div>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        <div class="panel-footer">
+                            <button class="btn primary-btn" onclick="saveAttendance()">Save Attendance</button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Payroll Section -->
+                <section id="payroll" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Payroll Management</h1>
+                        <div class="payroll-controls">
+                            <select id="payrollMonth">
+                                <option value="0">January</option>
+                                <option value="1">February</option>
+                                <option value="2">March</option>
+                                <option value="3">April</option>
+                                <option value="4">May</option>
+                                <option value="5">June</option>
+                                <option value="6">July</option>
+                                <option value="7">August</option>
+                                <option value="8">September</option>
+                                <option value="9">October</option>
+                                <option value="10">November</option>
+                                <option value="11">December</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="payrollTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Daily Wage</th>
+                                    <th>Days Present</th>
+                                    <th>Total Pay (₹)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Inventory Section -->
+                <section id="inventory" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Inventory Tracking</h1>
+                        <button class="btn primary-btn" onclick="openModal('inventory')"><i class="fa-solid fa-plus"></i> Log Production</button>
+                    </div>
+                    <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 2rem;">
+                         <div class="stat-card">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                            <div class="stat-info">
+                                <p>Total Produced</p>
+                                <h3 id="totalProd">0 Units</h3>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-boxes-packing"></i>
+                            <div class="stat-info">
+                                <p>In Stock</p>
+                                <h3 id="currentStock">0 Units</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="inventoryTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Expenses Section -->
+                <section id="expenses" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Business Expenses</h1>
+                        <button class="btn primary-btn" onclick="openModal('expense')"><i class="fa-solid fa-plus"></i> New Expense</button>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="expenseTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount (₹)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tracking Section -->
+                <section id="tracking" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Trolley Tracking</h1>
+                        <button class="btn primary-btn" onclick="openModal('dispatch')"><i class="fa-solid fa-truck-fast"></i> New Dispatch</button>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="fleetTable">
+                            <thead>
+                                <tr>
+                                    <th>Departure</th>
+                                    <th>Trolley</th>
+                                    <th>Driver</th>
+                                    <th>Destination</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Messages Section -->
+                <section id="messages" class="dashboard-section">
+                    <div class="section-top">
+                        <h1>Customer Messages</h1>
+                        <button class="btn outline-btn" onclick="exportData('messages')"><i class="fa-solid fa-download"></i> Export</button>
+                    </div>
+                    <div class="glass-panel">
+                        <table id="messagesTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Contact</th>
+                                    <th>Message</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="modalOverlay" class="modal-overlay">
+        <!-- New Ledger Modal -->
+        <div id="ledgerModal" class="dashboard-modal glass-panel">
+            <h2>Add Ledger Entry</h2>
+            <form id="ledgerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Customer Name</label>
+                        <input type="text" id="custName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="saleDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="saleDesc" placeholder="e.g. Grade A Plypatta"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="saleQty" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Amount (₹)</label>
+                        <input type="number" id="saleAmount" required>
+                    </div>
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="btn outline-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Save Entry</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- New Employee Modal -->
+        <div id="employeeModal" class="dashboard-modal glass-panel">
+            <h2>Add New Employee</h2>
+            <form id="employeeForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="empName" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input type="text" id="empRole" placeholder="e.g. Peeler Operator" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Daily Wage (₹)</label>
+                        <input type="number" id="empWage" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Joining Date</label>
+                    <input type="date" id="empJoinDate" required>
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="btn outline-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Add Employee</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- New Inventory Modal -->
+        <div id="inventoryModal" class="dashboard-modal glass-panel">
+            <h2>Log Production</h2>
+            <form id="inventoryForm">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="prodName" value="Premium Plypatta" required>
+                </div>
+                <div class="form-group">
+                    <label>Grade/Type</label>
+                    <select id="prodType">
+                        <option>Core Veneer (Plypatta)</option>
+                        <option>Face Veneer</option>
+                        <option>Commercial Grade</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Quantity (Bundles)</label>
+                        <input type="number" id="prodQty" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="prodDate" required>
+                    </div>
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="btn outline-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Save Log</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- New Expense Modal -->
+        <div id="expenseModal" class="dashboard-modal glass-panel">
+            <h2>Record Expense</h2>
+            <form id="expenseForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="expCat">
+                            <option>Raw Wood</option>
+                            <option>Fuel / Diesel</option>
+                            <option>Electricity</option>
+                            <option>Maintenance</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" id="expDate" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="expDesc" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="expAmount" required>
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="btn outline-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Save Expense</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Dispatch Modal -->
+        <div id="dispatchModal" class="dashboard-modal glass-panel">
+            <h2>New Trolley Dispatch</h2>
+            <form id="dispatchForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Trolley ID/No.</label>
+                        <input type="text" id="trolleyId" placeholder="e.g. TR-01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" id="dispatchTime" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Destination / Client</label>
+                    <input type="text" id="destination" required>
+                </div>
+                <div class="modal-btns">
+                    <button type="button" class="btn outline-btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn primary-btn">Dispatch</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="admin-script.js"></script>
+</body>
+</html>

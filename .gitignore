@@ -1,0 +1,18 @@
+# Browser/OS temporary files
+.DS_Store
+Thumbs.db
+.mem
+
+# Editor/IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+node_modules/
+dist/
+build/
+.env
+.npm
+.cache

@@ -1,0 +1,19 @@
+{
+  "name": "shri-balaji-wood-management",
+  "version": "1.0.0",
+  "description": "Internal management system and public website for Shri Balaji Wood.",
+  "main": "index.html",
+  "keywords": [
+    "plywood",
+    "management",
+    "dashboard",
+    "attendance",
+    "ledger"
+  ],
+  "author": "Shri Balaji Wood",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shri-balaji-wood/management-system"
+  }
+}

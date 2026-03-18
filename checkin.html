@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SBW | Employee Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8b5a2b;
+            --primary-dark: #65411f;
+            --bg: #faf8f5;
+            --white: #ffffff;
+            --text: #333;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            color: var(--text);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .portal-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 100%;
+            max-width: 400px;
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(139, 90, 43, 0.1);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .logo {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            display: block;
+            letter-spacing: 1px;
+        }
+        h2 {
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+            color: #222;
+        }
+        p {
+            color: #666;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+            color: #444;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        select {
+            width: 100%;
+            padding: 1.2rem;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: 1.1rem;
+            appearance: none;
+            background-color: var(--white);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%238b5a2b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1.2rem center;
+            background-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.1);
+        }
+        .check-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1.2rem;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 10px 20px rgba(139, 90, 43, 0.2);
+        }
+        .check-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(139, 90, 43, 0.3);
+        }
+        .check-btn:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        .success-msg {
+            display: none;
+            margin-top: 2rem;
+            color: #2e7d32;
+            font-weight: 600;
+            padding: 1rem;
+            background: #e8f5e9;
+            border-radius: 12px;
+            animation: slideUp 0.5s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .footer-link {
+            margin-top: 2rem;
+            display: inline-block;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .footer-link:hover {
+            color: var(--primary);
+            background: rgba(139, 90, 43, 0.05);
+        }
+        @media (max-width: 480px) {
+            .portal-card {
+                padding: 2.5rem 1.5rem;
+                box-shadow: none;
+                background: transparent;
+                border: none;
+            }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+    <div class="portal-card">
+        <span class="logo">Shri Balaji Wood</span>
+        <h2>Employee Check-in</h2>
+        <p>Mark your attendance for today</p>
+        
+        <div class="form-group">
+            <label>Select Your Name</label>
+            <select id="empSelect">
+                <option value="">-- Choose Name --</option>
+            </select>
+        </div>
+
+        <button class="check-btn" id="checkBtn">
+            <i class="fa-solid fa-user-check"></i> Mark Present
+        </button>
+
+        <div id="successMsg" class="success-msg">
+            <i class="fa-solid fa-circle-check"></i> Attendance Marked Successfully!
+        </div>
+
+        <a href="index.html" class="footer-link">Back to Website</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const empSelect = document.getElementById('empSelect');
+            const checkBtn = document.getElementById('checkBtn');
+            const successMsg = document.getElementById('successMsg');
+
+            // Load employees from shared state
+            const employees = JSON.parse(localStorage.getItem('sbp_employees')) || [];
+            
+            employees.forEach(emp => {
+                const opt = document.createElement('option');
+                opt.value = emp.id;
+                opt.textContent = emp.name;
+                empSelect.appendChild(opt);
+            });
+
+            checkBtn.addEventListener('click', () => {
+                const empId = empSelect.value;
+                if(!empId) {
+                    alert('Please select your name first.');
+                    return;
+                }
+
+                const today = new Date().toISOString().split('T')[0];
+                const attendance = JSON.parse(localStorage.getItem('sbp_attendance')) || {};
+                
+                if(!attendance[today]) attendance[today] = {};
+                attendance[today][empId] = 'Present';
+
+                localStorage.setItem('sbp_attendance', JSON.stringify(attendance));
+
+                // UI Feedback
+                checkBtn.style.display = 'none';
+                successMsg.style.display = 'block';
+
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                    checkBtn.style.display = 'flex';
+                    empSelect.value = '';
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
